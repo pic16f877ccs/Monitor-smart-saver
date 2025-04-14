@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.monitor-smart-saver" path="/org/gnome/shell/extensions/monitor-smart-saver/">
+    <key name="delay-off" type="u">
+      <default>2</default>
+    </key>
+    <key name="delay-double-click" type="u">
+      <default>500</default>
+    </key>
+    <key name="play-sound" type="b">
+      <default>false</default>
+    </key>
+  </schema>
+</schemalist>
