@@ -5,14 +5,16 @@
   "session-modes": [
     "user"
   ],
+  "gettext-domain": "monitor-smart-saver",
   "settings-schema": "org.gnome.shell.extensions.monitor-smart-saver",
   "shell-version": [
     "45",
     "46",
-    "47"
+    "47",
+    "48"
   ],
   "url": "https://github.com/pic16f877ccs/Monitor-smart-saver",
   "uuid": "monitorSmartSaver@pic16f877ccs.github.com",
   "version": 1,
-  "version-name": "1.0"
+  "version-name": "1.2"
 }

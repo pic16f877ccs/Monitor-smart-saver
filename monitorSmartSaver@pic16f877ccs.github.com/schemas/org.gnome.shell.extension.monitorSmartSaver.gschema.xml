@@ -10,5 +10,11 @@
     <key name="play-sound" type="b">
       <default>false</default>
     </key>
+    <key name="sound-file" type="s">
+      <default>''</default>
+    </key>
+    <key name="sound-file-map" type="a{ss}">
+      <default>{"message": "/usr/share/sounds/freedesktop/stereo/message.oga"}</default>
+    </key>
   </schema>
 </schemalist>
