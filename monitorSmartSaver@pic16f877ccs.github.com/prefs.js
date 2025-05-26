@@ -30,7 +30,7 @@ export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
         window.add(page);
 
         const behaviorGroup = new Adw.PreferencesGroup({ title: _('Behavior')});
-        behaviorGroup.set_separate_rows(true);
+        behaviorGroup.set_separate_rows?.(true);
         page.add(behaviorGroup);
 
         const soundChoiceRow = new Adw.ComboRow({
@@ -105,7 +105,7 @@ soundChoiceRow.get_factory().connect('bind', (factory, listItem) => {
         );
 
         const delayGroup = new Adw.PreferencesGroup({ title: _('Delay settings') });
-        delayGroup.set_separate_rows(true);
+        delayGroup.set_separate_rows?.(true);
         page.add(delayGroup);
         
         const screenOffDelayRow = Adw.SpinRow.new_with_range(1, 5, 1);
