@@ -34,7 +34,7 @@ const ButtonIndicator = GObject.registerClass(
     { GTypeName: 'ButtonIndicator' },
     class ButtonIndicator extends PanelMenu.Button {
         constructor(metadata, settings, extension) {
-            super(0.0, metadata.name, false);
+            super(0.5, metadata.name, false);
 
             this._settings = settings;
             this._extension = extension;
