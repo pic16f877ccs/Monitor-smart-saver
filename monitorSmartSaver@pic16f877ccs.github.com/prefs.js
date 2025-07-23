@@ -41,27 +41,27 @@ export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
         });
         behaviorGroup.add(soundChoiceRow);
 
-soundChoiceRow.set_factory(Gtk.SignalListItemFactory.new(() => {
-    const label = new Gtk.Label({ xalign: 0 });
-    return label;
-}));
+        soundChoiceRow.set_factory(Gtk.SignalListItemFactory.new(() => {
+            const label = new Gtk.Label({ xalign: 0 });
+            return label;
+        }));
 
-soundChoiceRow.get_factory().connect('setup', (factory, listItem) => {
-    const label = new Gtk.Label({ xalign: 0 });
-    listItem.set_child(label);
-});
+        soundChoiceRow.get_factory().connect('setup', (factory, listItem) => {
+            const label = new Gtk.Label({ xalign: 0 });
+            listItem.set_child(label);
+        });
 
-soundChoiceRow.get_factory().connect('bind', (factory, listItem) => {
-    const label = listItem.get_child();
-    const item = listItem.get_item();
+        soundChoiceRow.get_factory().connect('bind', (factory, listItem) => {
+            const label = listItem.get_child();
+            const item = listItem.get_item();
 
-    if (label && item instanceof Gtk.StringObject) {
-        let full = item.get_string();
-        let dotIndex = full.lastIndexOf('.');
-        let base = dotIndex > 0 ? full.slice(0, dotIndex) : full;
-        label.label = base;
-    }
-});
+            if (label && item instanceof Gtk.StringObject) {
+                let full = item.get_string();
+                let dotIndex = full.lastIndexOf('.');
+                let base = dotIndex > 0 ? full.slice(0, dotIndex) : full;
+                label.label = base;
+            }
+        });
         this._soundFileLister.listSoundFiles().then(files => {
             soundChoiceRow.set_model(Gtk.StringList.new(files));
             const currentSoundIndex = files.indexOf(currentSoundName);
