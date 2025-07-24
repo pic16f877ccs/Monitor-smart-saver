@@ -56,7 +56,8 @@ const ButtonIndicator = GObject.registerClass(
                 'changed::delay-off', () => {
                     this._screensaverActevateTime = this._settings.get_uint('delay-off');
                 },
-                this);
+                this,
+            );
 
             this.connect('button-press-event', this._onButtonPressed.bind(this));
         }
