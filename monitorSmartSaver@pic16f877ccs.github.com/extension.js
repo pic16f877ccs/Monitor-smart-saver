@@ -143,9 +143,9 @@ const ButtonIndicator = GObject.registerClass(
 
                 this._screenSaverActivateTimeout = 
                     GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this._screensaverActevateTime, () => {
-                        const soundFilePath = Gio.File.new_for_path(this._settings.get_value('sound-file-map').deepUnpack().soundPath);
-                        const playSound = this._settings.get_boolean('play-sound');
-                        if (playSound) {
+
+                        if (this._settings.get_boolean('play-sound')) {
+                            const soundFilePath = Gio.File.new_for_path(this._settings.get_value('sound-file-map').deepUnpack().soundPath);
                             const player = global.display.get_sound_player();
                             player.play_from_file(soundFilePath, 'Notification sound', null);
                         }
