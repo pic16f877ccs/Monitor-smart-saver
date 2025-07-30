@@ -41,10 +41,7 @@ export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
         });
         behaviorGroup.add(soundChoiceRow);
 
-        soundChoiceRow.set_factory(Gtk.SignalListItemFactory.new(() => {
-            const label = new Gtk.Label({ xalign: 0 });
-            return label;
-        }));
+        soundChoiceRow.set_factory(Gtk.SignalListItemFactory.new());
 
         soundChoiceRow.get_factory().connect('setup', (factory, listItem) => {
             const label = new Gtk.Label({ xalign: 0 });
@@ -62,6 +59,7 @@ export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
                 label.label = base;
             }
         });
+
         this._soundFileLister.listSoundFiles().then(files => {
             soundChoiceRow.set_model(Gtk.StringList.new(files));
             const currentSoundIndex = files.indexOf(currentSoundName);
@@ -175,7 +173,7 @@ class SoundFileLister {
             });
         });
 
-        return Promise.all(readDirPromises)
+        return Promise.allSettled(readDirPromises)
             .then(() => {
                 if (allFiles.size > 0) {
                     return Array.from(allFiles).sort();
