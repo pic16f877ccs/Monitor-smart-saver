@@ -96,13 +96,39 @@ const ButtonIndicator = GObject.registerClass(
                 const settingsMenuItem = new PopupMenu.PopupMenuItem(_('Settings'), {
                 });
 
-                settingsMenuItem.setOrnament(PopupMenu.Ornament.NONE);
+                settingsMenuItem.setOrnament(PopupMenu.Ornament.HIDDEN);
 
                 this.menu.addMenuItem(settingsMenuItem);
                 this.menu.open();
 
                 settingsMenuItem.connect('activate', (item, event) => { 
                     this._extension.openPreferences();
+                });
+
+                const settingsSystemMenuItem = new PopupMenu.PopupMenuItem(_('System settings'), {
+                });
+
+                settingsSystemMenuItem.setOrnament(PopupMenu.Ornament.HIDDEN);
+
+                this.menu.addMenuItem(settingsSystemMenuItem);
+                this.menu.open();
+
+                settingsSystemMenuItem.connect('activate', (item, event) => { 
+                    GLib.spawn_command_line_async('gnome-control-center privacy');
+                });
+
+                this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+                this._screensaverSettings = new Gio.Settings({ schema: "org.gnome.desktop.screensaver" });
+                const getState = this._screensaverSettings.get_boolean('lock-enabled');
+                const menuItem = new PopupMenu.PopupSwitchMenuItem(_('Lock disable'), getState, { });
+
+                menuItem.setToggleState(!menuItem.state);
+                menuItem.toggle();
+                this.menu.addMenuItem(menuItem);
+
+                menuItem.connect('toggled', (item, state) => {
+                    item.state = state;
+                    this._screensaverSettings.set_boolean('lock-enabled', state);
                 });
 
                 return Clutter.EVENT_STOP;
