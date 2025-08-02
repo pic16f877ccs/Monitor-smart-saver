@@ -25,11 +25,19 @@ msgstr "Bildschirmschoner-Aktivierung abgebrochen!"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: extension.js:145
+#: extension.js:108
+msgid "System settings"
+msgstr "Systemeinstellungen"
+
+#: extension.js:123
+msgid "Lock disable"
+msgstr "Sperre deaktivieren"
+
+#: extension.js:148
 msgid "Monitor Smart Saver"
 msgstr "Monitor Smart Saver"
 
-#: extension.js:194
+#: extension.js:196
 #, javascript-format
 msgid "Screensaver will lock the screen in %d second!"
 msgid_plural "Screensaver will lock the screen in %d seconds!"
@@ -43,58 +51,58 @@ msgid_plural "The screensaver will start in %d seconds!"
 msgstr[0] "Der Bildschirmschoner startet in %d Sekunde!"
 msgstr[1] "Der Bildschirmschoner startet in %d Sekunden!"
 
-#: prefs.js:21
+#: prefs.js:27
 msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
 
-#: prefs.js:26
+#: prefs.js:32
 msgid "Behavior"
 msgstr "Verhalten"
 
-#: prefs.js:31
+#: prefs.js:37
 msgid "Notification Sound"
 msgstr "Benachrichtigungston"
 
-#: prefs.js:32
+#: prefs.js:38
 msgid "Choose which sound to play"
 msgstr "Wählen Sie den abzuspielenden Ton aus"
 
-#: prefs.js:33
+#: prefs.js:39
 msgid "Loading..."
 msgstr "Wird geladen ..."
 
-#: prefs.js:86
+#: prefs.js:91
 msgid "Enable sound"
 msgstr "Ton aktivieren"
 
-#: prefs.js:87
+#: prefs.js:92
 msgid "Enable or disable sound notifications"
 msgstr "Tonbenachrichtigungen aktivieren oder deaktivieren"
 
-#: prefs.js:100
+#: prefs.js:105
 msgid "Delay settings"
 msgstr "Verzögerungseinstellungen"
 
-#: prefs.js:107
+#: prefs.js:112
 msgid "Screen Off Delay"
 msgstr "Bildschirmabschaltverzögerung"
 
-#: prefs.js:108
+#: prefs.js:113
 msgid "Time in seconds before the screen turns off"
 msgstr "Zeit in Sekunden, bevor der Bildschirm ausgeschaltet wird"
 
-#: prefs.js:114
+#: prefs.js:119
 msgid "Double-Click Delay"
 msgstr "Doppelklick-Verzögerung"
 
-#: prefs.js:115
+#: prefs.js:120
 msgid "Double-click detection time in milliseconds"
 msgstr "Erkennungszeit für Doppelklicks in Millisekunden"
 
-#: prefs.js:164
+#: prefs.js:169
 msgid "Failed to read directory"
 msgstr "Verzeichnis konnte nicht gelesen werden"
 
-#: prefs.js:176
+#: prefs.js:181
 msgid "No matching sound files found"
 msgstr "Keine passenden Sounddateien gefunden"
