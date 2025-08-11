@@ -14,7 +14,7 @@
       <default>''</default>
     </key>
     <key name="sound-file-map" type="a{ss}">
-      <default>{"message": "/usr/share/sounds/freedesktop/stereo/message.ogg"}</default>
+      <default>{"hum.ogg": "/usr/share/sounds/freedesktop/stereo/message.ogg"}</default>
     </key>
   </schema>
 </schemalist>

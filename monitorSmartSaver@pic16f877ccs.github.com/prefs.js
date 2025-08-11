@@ -9,7 +9,6 @@ import { ExtensionPreferences,
 
 export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-
         window._settings = this.getSettings();
 
         const extensionSoundsPath = this.metadata.path + '/sounds';
