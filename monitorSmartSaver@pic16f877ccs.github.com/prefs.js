@@ -20,6 +20,7 @@ export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
         const filesExt = ['.ogg', '.oga', '.wav'];
 
         const currentSoundName = window._settings.get_value('sound-file-map').deepUnpack().soundName;
+
         this._soundFileLister = new SoundFileLister(dirPaths, filesExt);
 
         const page = new Adw.PreferencesPage({
@@ -61,6 +62,7 @@ export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
 
         this._soundFileLister.listSoundFiles().then(files => {
             soundChoiceRow.set_model(Gtk.StringList.new(files));
+
             const currentSoundIndex = files.indexOf(currentSoundName);
             soundChoiceRow.set_selected(currentSoundIndex >= 0 ? currentSoundIndex : 0);
         })
@@ -77,13 +79,12 @@ export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
             const soundFilePath = this._soundFileLister.qualifiedName(selectedKey);
             const soundFileName = GLib.Variant.new('a{ss}',
                 {
-                    soundName: selectedKey,
-                    soundPath: soundFilePath,
+                    'soundName': selectedKey,
+                    'soundPath': soundFilePath,
                 }
             );
 
             window._settings.set_value('sound-file-map', soundFileName);
-            const name = window._settings.get_value('sound-file-map').deepUnpack();
         });
 
         const playSoundSwitchRow = new Adw.SwitchRow({

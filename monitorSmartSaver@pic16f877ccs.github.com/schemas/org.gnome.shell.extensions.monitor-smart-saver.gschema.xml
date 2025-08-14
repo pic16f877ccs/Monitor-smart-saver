@@ -10,11 +10,8 @@
     <key name="play-sound" type="b">
       <default>false</default>
     </key>
-    <key name="sound-file" type="s">
-      <default>''</default>
-    </key>
     <key name="sound-file-map" type="a{ss}">
-      <default>{"hum.ogg": "/usr/share/sounds/freedesktop/stereo/message.ogg"}</default>
+      <default>{"soundName": "hum.ogg", "soundPath": "/usr/share/sounds/freedesktop/stereo/message.ogg"}</default>
     </key>
   </schema>
 </schemalist>
