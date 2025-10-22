@@ -10,9 +10,9 @@ import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-const DOUBLE_CLICKS = 2;
-const INIT_CLICKS = 0;
-const CLICKS_CANCEL = 3;
+const DOUBLE_CLICK = 2;
+const INIT_CLICK = 0;
+const CLICK_CANCEL = 3;
 
 export default class MonitorSmartSaverExtension extends Extension {
     constructor(metadata) {
@@ -47,7 +47,7 @@ const ButtonIndicator = GObject.registerClass(
             });
 
             this.add_child(icon);
-            this._clickCount = INIT_CLICKS;
+            this._clickCount = INIT_CLICK;
 
             this._settings.connectObject(
                 'changed::delay-double-click', () => { 
@@ -70,7 +70,7 @@ const ButtonIndicator = GObject.registerClass(
                 }
 
             if (button == Clutter.BUTTON_PRIMARY) {
-                if (this._clickCount == INIT_CLICKS) {
+                if (this._clickCount == INIT_CLICK) {
                     if (!this._doubleClickDetectionTimeout) {
                         this._doubleClickDetectionTimeout =
                             GLib.timeout_add(GLib.PRIORITY_DEFAULT, this._doubleClickTime, this._click_processing.bind(this));
@@ -79,11 +79,11 @@ const ButtonIndicator = GObject.registerClass(
 
                 this._clickCount = this._clickCount + 1;
 
-                if (this._clickCount >= CLICKS_CANCEL) {
+                if (this._clickCount >= CLICK_CANCEL) {
                     if (this._screenSaverActivateTimeout) {
                         GLib.Source.remove(this._screenSaverActivateTimeout);
                         delete this._screenSaverActivateTimeout;
-                        this._clickCount = INIT_CLICKS;
+                        this._clickCount = INIT_CLICK;
                 if (this._extensionNotificationSource) {
                     this._extensionNotificationSource.destroy(MessageTray.NotificationDestroyedReason.REPLACED);
                 }
@@ -182,7 +182,7 @@ const ButtonIndicator = GObject.registerClass(
                             this._screenSaverSetActive();
                         }
 
-                        this._clickCount = INIT_CLICKS;
+                        this._clickCount = INIT_CLICK;
 
                         delete this._screenSaverActivateTimeout;
                         return GLib.SOURCE_REMOVE;
@@ -191,7 +191,7 @@ const ButtonIndicator = GObject.registerClass(
         }
 
         _click_processing() {
-            if (this._clickCount >= DOUBLE_CLICKS) {
+            if (this._clickCount >= DOUBLE_CLICK) {
                 this._screenSaverActivate(
                     ngettext('Screensaver will lock the screen in %d second!', 'Screensaver will lock the screen in %d seconds!',
                         this._screensaverActevateTime).format(this._screensaverActevateTime), true);
