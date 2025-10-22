@@ -20,8 +20,10 @@ Monitor Smart Saver is a GNOME Shell extension that enables you to quickly turn 
 
 2. **Install to Your Extensions Directory:**
    ```
+   cd ~/Downloads/
    git clone https://github.com/pic16f877ccs/Monitor-smart-saver.git
-   cp -r Monitor-smart-saver/monitorSmartSaver@pic16f877ccs.github.com ~/.local/share/gnome-shell/extensions/
+   ./run_dev.sh build
+   ./run_dev.sh install
    ```
 
 3. **Enable the Extension:**
@@ -48,7 +50,7 @@ Customize your experience with the following options:
 
 ## Compatibility
 
-- **GNOME Shell Versions:** 45, 46, 47, 48
+- **GNOME Shell Versions:** 47, 48, 49
 - **Session Modes:** User
 
 ## Troubleshooting
