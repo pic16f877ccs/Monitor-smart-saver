@@ -3,33 +3,44 @@ set -e
 
 readonly _EXTENSION='monitorSmartSaver@pic16f877ccs.github.com'
 readonly _EXTENSION_NAME='monitor-smart-saver'
+readonly PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly BUILD_DIST="${PROJECT_ROOT}/build/dist/"
 
 build() {
-    mkdir -p './build/temp'
-    mkdir -p './build/dist'
+    local build_temp="${PROJECT_ROOT}/build/temp/"
+    local path_to_schema="${PROJECT_ROOT}/assets/org.gnome.shell.extensions.monitor-smart-saver.gschema.xml"
+    local path_to_podir="${PROJECT_ROOT}/assets/locale/"
+    local path_to_src="${PROJECT_ROOT}/src/"
+    local extra_sources_list=()
+    local extra_sources=()
 
-    rm -rf "./build/temp/*"
-    cp -r $(find './src' -mindepth 1 -maxdepth 1 -not -name 'assets') './build/temp/'
-    cp -r './assets/sounds' './build/temp/.'
+    mkdir -p "$build_temp"
+    mkdir -p "$BUILD_DIST"
+
+    rm -rf "${build_temp:?}"/*
+
+    find "$path_to_src" -mindepth 1 -maxdepth 1 -not -name 'assets' -exec cp -r {} "$build_temp" \;
+
+    cp -r "${PROJECT_ROOT}"/assets/sounds "$build_temp"
 
     echo 'Packing...'
 
-    local extra_source_list=$(find "${PWD}/build/temp/" -mindepth 1 -maxdepth 1 ! -name 'metadata.json' ! -name 'extension.js' ! -name 'prefs.js' ! -name     'stylesheet.css')
- 
-    local extra_sources=()
+    mapfile -t extra_source_list < <(find "${build_temp}" -mindepth 1 -maxdepth 1 \
+        ! -name 'metadata.json' ! -name 'extension.js' ! -name 'prefs.js' ! -name 'stylesheet.css')
+
     local extra_source
- 
-    for extra_source in "$extra_source_list"; do
-      extra_sources+=("--extra-source=${extra_source}")
+    for extra_source in "${extra_source_list[@]}"; do
+        extra_sources+=("--extra-source=${extra_source}")
     done
 
-    local path_to_schema="${PWD}/assets/org.gnome.shell.extensions.monitor-smart-saver.gschema.xml"
-    local path_to_podir="${PWD}/assets/locale/"
-    echo $path_to_podir
-   
-    if gnome-extensions pack -f -o './build/dist' --schema="$path_to_schema" "$extra_sources" --podir="$path_to_podir" './build/temp'; then
+    if gnome-extensions pack -f -o "$BUILD_DIST" \
+        --schema="$path_to_schema" \
+        "${extra_sources[@]}" \
+        --podir="$path_to_podir" \
+        "$build_temp"; then
+
         echo '...'
-        echo 'Success!'
+        echo 'Build successful.'
     fi
 }
 
