@@ -54,11 +54,14 @@ nested() {
     else
         if [ "$first_arg" = '--fullhd' ]; then
             echo 'Full Hd screen size...'
+            echo '...'
 
             export MUTTER_DEBUG_DUMMY_MODE_SPECS=1920x1080 
             export MUTTER_DEBUG_DUMMY_MONITOR_SCALES=1.5 
         else
             echo 'UHD screen size...'
+            echo '...'
+
             export MUTTER_DEBUG_DUMMY_MODE_SPECS=3840x2100 
             export MUTTER_DEBUG_DUMMY_MONITOR_SCALES=2.0 
         fi
@@ -70,8 +73,10 @@ nested() {
 
 debug() {
     local fullhd="${1}"
+
     echo 'Debugging...'
     echo '...'
+
     if gnome-extensions list | grep -Ewoq "$_EXTENSION"; then
         echo "The ${_EXTENSION} is installed"
     else
@@ -83,6 +88,8 @@ debug() {
         enable
     fi
 
+    build
+    install
     nested "$fullhd"
 }
 
@@ -90,106 +97,122 @@ install() {
     local second_arg="${2}"
     if [[ "$second_arg" == '-b' ]]; then
         build
+
         echo "..."
     fi
 
     echo 'Installing...'
-    gnome-extensions install --force "./build/dist/${_EXTENSION}.shell-extension.zip"
+
+    gnome-extensions install --force "${BUILD_DIST}${_EXTENSION}.shell-extension.zip"
+
     echo '...'
     echo 'Success!'
 }
 
 uninstall() {
     echo 'Uninstalling...'
+
     gnome-extensions uninstall "$_EXTENSION"
+
     echo '...'
     echo 'Success!'
 }
 
 enable() {
     echo 'Enabling...'
+
     gnome-extensions enable "$_EXTENSION"
+
     echo '...'
     echo 'Success!'
 }
 
 disable() {
     echo 'Disabling...'
+
     gnome-extensions disable "$_EXTENSION"
+
     echo '...'
     echo 'Success!'
 }
 
 watch() {
-  echo 'Watching for setting changes...'
-  dconf watch "/org/gnome/shell/extensions/${_EXTENSION_NAME}/"
+    echo 'Watching for setting changes...'
+
+    dconf watch "/org/gnome/shell/extensions/${_EXTENSION_NAME}/"
 }
 
 reset() {
-  echo 'Watching for setting changes...'
-  dconf reset -f "/org/gnome/shell/extensions/${_EXTENSION_NAME}/"
+    echo 'Watching for setting changes...'
+
+    dconf reset -f "/org/gnome/shell/extensions/${_EXTENSION_NAME}/"
 }
 
 prefs() {
-  echo 'Opening prefs...'
-  gnome-extensions prefs "$_EXTENSION"
+    echo 'Opening prefs...'
+
+    gnome-extensions prefs "$_EXTENSION"
 }
 
 translations() {
-  echo "Updating translations..."
+    local path_to_pod="${PROJECT_ROOT}/assets/locale/${_EXTENSION}.pot"
 
-  touch "assets/locale/${_EXTENSION}.pot"
+    echo "Updating translations..."
 
-  find ./src -type f -a -iname "*.js" | xargs xgettext --from-code=UTF-8 \
-    --add-comments \
-    --join-existing \
-    --keyword=_ \
-    --keyword=C_:1c,2 \
-    --language=Javascript \
-    --output="assets/locale/${_EXTENSION}.pot"
+    touch "${path_to_pod}"
 
-  for pofile in assets/locale/*.po; do
-    echo "Updating: $pofile"
-    msgmerge -U "$pofile" "assets/locale/${_EXTENSION}.pot"
-  done
+    find ./src -type f -a -iname "*.js" | xargs xgettext --from-code=UTF-8 \
+      --add-comments \
+      --join-existing \
+      --keyword=_ \
+      --keyword=C_:1c,2 \
+      --language=Javascript \
+      --output="${path_to_pod}"
 
-  rm assets/locale/*.po~ 2>/dev/null
-  echo "Done"
+    for pofile in "${PROJECT_ROOT}"/assets/locale/*.po; do
+      echo "Updating: $pofile"
+
+      msgmerge -U "$pofile" "${path_to_pod}"
+    done
+
+    rm "${PROJECT_ROOT}"/assets/locale/*.po~ 2>/dev/null
+
+    echo "Done"
 }
 
 case "$1" in
 debug)
-  debug "$2"
-  ;;
+    debug "$2"
+    ;;
 install)
-  install "$1" "$2"
-  ;;
+    install "$1" "$2"
+    ;;
 uninstall)
-  uninstall
-  ;;
+    uninstall
+    ;;
 enable)
-  enable
-  ;;
+    enable
+    ;;
 disable)
-  disable
-  ;;
+    disable
+    ;;
 build)
-  build
-  ;;
+    build
+    ;;
 translations)
-  translations
-  ;;
+    translations
+    ;;
 prefs)
-  prefs
-  ;;
+    prefs
+    ;;
 watch)
-  watch
-  ;;
+    watch
+    ;;
 reset)
-  reset
-  ;;
+    reset
+    ;;
 *)
-  echo "Usage: $0 {debug|build|install|uninstall|enable|disable|prefs|watch|reset|translations}"
-  exit 1
-  ;;
+    echo "Usage: $0 {debug|build|install|uninstall|enable|disable|prefs|watch|reset|translations}"
+    exit 1
+    ;;
 esac
