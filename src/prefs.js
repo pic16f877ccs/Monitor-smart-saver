@@ -7,21 +7,24 @@ import GLib from 'gi://GLib';
 import { ExtensionPreferences,
     gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
+const FILES_EXT = ['.ogg', '.oga', '.wav'];
+const ALERTS_SOUNDS_PATH = '/usr/share/sounds/gnome/default/alerts';
+const STEREO_SOUNDS_PATH = '/usr/share/sounds/freedesktop/stereo';
+
 export default class MonitorSmartSaverPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         window._settings = this.getSettings();
 
         const extensionSoundsPath = this.metadata.path + '/sounds';
         const dirPaths = [
-            '/usr/share/sounds/gnome/default/alerts',
-            '/usr/share/sounds/freedesktop/stereo',
+            ALERTS_SOUNDS_PATH,
+            STEREO_SOUNDS_PATH,
             extensionSoundsPath,
         ];
-        const filesExt = ['.ogg', '.oga', '.wav'];
 
         const currentSoundName = window._settings.get_value('sound-file-map').deepUnpack().soundName;
 
-        this._soundFileLister = new SoundFileLister(dirPaths, filesExt);
+        this._soundFileLister = new SoundFileLister(dirPaths, FILES_EXT);
 
         const page = new Adw.PreferencesPage({
             title: _('General Settings'),
