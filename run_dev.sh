@@ -161,7 +161,7 @@ translations() {
 
     touch "${path_to_pod}"
 
-    find ./src -type f -a -iname "*.js" | xargs xgettext --from-code=UTF-8 \
+    find "${PROJECT_ROOT}"/src -type f -a -iname "*.js" | xargs xgettext --from-code=UTF-8 \
       --add-comments \
       --join-existing \
       --keyword=_ \
