@@ -6,12 +6,15 @@
             <default>2</default>
         </key>
         <key name="delay-double-click" type="u">
+            <summary>Double-click detection delay in milliseconds</summary>
             <default>500</default>
         </key>
         <key name="play-sound" type="b">
+            <summary>Enable sound notification</summary>
             <default>false</default>
         </key>
         <key name="sound-file-map" type="a{ss}">
+            <summary>Selected notification sound</summary>
             <default>{"soundName": "hum.ogg", "soundPath": "/usr/share/sounds/freedesktop/stereo/hum.ogg"}</default>
         </key>
     </schema>
