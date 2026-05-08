@@ -12,7 +12,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 const DOUBLE_CLICK = 2;
 const INIT_CLICK = 0;
-const CLICK_CANCEL = 3;
+const CANCEL_CLICK_COUNT = 3;
 
 export default class MonitorSmartSaverExtension extends Extension {
     constructor(metadata) {
@@ -20,7 +20,7 @@ export default class MonitorSmartSaverExtension extends Extension {
     }
 
     enable() {
-        this._buttonIndicator = new ButtonIndicator(this.metadata, this.getSettings(), this);
+        this._buttonIndicator = new MonitorSmartSaverButtonIndicator(this.metadata, this.getSettings(), this);
         Main.panel.addToStatusArea(this.uuid, this._buttonIndicator);
     }
 
@@ -30,16 +30,17 @@ export default class MonitorSmartSaverExtension extends Extension {
     }
 }
 
-const ButtonIndicator = GObject.registerClass(
-    { GTypeName: 'ButtonIndicator' },
-    class ButtonIndicator extends PanelMenu.Button {
+const MonitorSmartSaverButtonIndicator = GObject.registerClass(
+    { GTypeName: 'MonitorSmartSaverButtonIndicator' },
+    class MonitorSmartSaverButtonIndicator extends PanelMenu.Button {
         constructor(metadata, settings, extension) {
             super(0.5, metadata.name, false);
 
             this._settings = settings;
             this._extension = extension;
             this._doubleClickTime = this._settings.get_uint('delay-double-click');
-            this._screensaverActevateTime = this._settings.get_uint('delay-off');
+            this._screensaverActivateTime = this._settings.get_uint('delay-off');
+            this._screensaverSettings = new Gio.Settings({ schema: "org.gnome.desktop.screensaver" });
 
             const icon = new St.Icon({
                 icon_name: 'video-display-symbolic',
@@ -54,7 +55,7 @@ const ButtonIndicator = GObject.registerClass(
                     this._doubleClickTime = this._settings.get_uint('delay-double-click');
                 },
                 'changed::delay-off', () => {
-                    this._screensaverActevateTime = this._settings.get_uint('delay-off');
+                    this._screensaverActivateTime = this._settings.get_uint('delay-off');
                 },
                 this,
             );
@@ -80,7 +81,7 @@ const ButtonIndicator = GObject.registerClass(
 
                 this._clickCount = this._clickCount + 1;
 
-                if (this._clickCount >= CLICK_CANCEL) {
+                if (this._clickCount >= CANCEL_CLICK_COUNT) {
                     if (this._screenSaverActivateTimeout) {
                         GLib.Source.remove(this._screenSaverActivateTimeout);
                         delete this._screenSaverActivateTimeout;
@@ -119,7 +120,6 @@ const ButtonIndicator = GObject.registerClass(
                 });
 
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-                this._screensaverSettings = new Gio.Settings({ schema: "org.gnome.desktop.screensaver" });
                 const getState = this._screensaverSettings.get_boolean('lock-enabled');
                 const menuItem = new PopupMenu.PopupSwitchMenuItem(_('Lock disable'), getState, { });
 
@@ -169,7 +169,7 @@ const ButtonIndicator = GObject.registerClass(
                 this._showNotification(message); 
 
                 this._screenSaverActivateTimeout = 
-                    GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this._screensaverActevateTime, () => {
+                    GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this._screensaverActivateTime, () => {
 
                         if (this._settings.get_boolean('play-sound')) {
                             const soundFilePath = Gio.File.new_for_path(this._settings.get_value('sound-file-map').deepUnpack().soundPath);
@@ -195,11 +195,11 @@ const ButtonIndicator = GObject.registerClass(
             if (this._clickCount >= DOUBLE_CLICK) {
                 this._screenSaverActivate(
                     ngettext('Screensaver will lock the screen in %d second!', 'Screensaver will lock the screen in %d seconds!',
-                        this._screensaverActevateTime).format(this._screensaverActevateTime), true);
+                        this._screensaverActivateTime).format(this._screensaverActivateTime), true);
             } else {
                 this._screenSaverActivate(
                     ngettext('The screensaver will start in %d second!', 'The screensaver will start in %d seconds!',
-                        this._screensaverActevateTime).format(this._screensaverActevateTime), false);
+                        this._screensaverActivateTime).format(this._screensaverActivateTime), false);
             }
 
             delete this._doubleClickDetectionTimeout;
@@ -221,7 +221,7 @@ const ButtonIndicator = GObject.registerClass(
                     try {
                         conn.call_finish(res);
                     } catch (e) {
-                        logError(e);
+                        console.error(e);
                     }
                 }
             );
@@ -242,7 +242,7 @@ const ButtonIndicator = GObject.registerClass(
                     try {
                         conn.call_finish(res);
                     } catch (e) {
-                        logError(e);
+                        console.error(e);
                     }
                 }
             );
@@ -266,6 +266,8 @@ const ButtonIndicator = GObject.registerClass(
 
             this._settings.disconnectObject(this);
             this._settings = null;
+
+            this._screensaverSettings = null;
 
             super.destroy();
         }
