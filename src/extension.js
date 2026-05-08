@@ -59,6 +59,7 @@ const ButtonIndicator = GObject.registerClass(
                 this,
             );
 
+            this?._clickGesture?.set_enabled(false);
             this.connect('button-press-event', this._onButtonPressed.bind(this));
         }
 

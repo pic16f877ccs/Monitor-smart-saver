@@ -7,10 +7,11 @@
   "shell-version": [
     "47",
     "48",
-    "49"
+    "49",
+    "50"
   ],
   "url": "https://github.com/pic16f877ccs/Monitor-smart-saver",
   "uuid": "monitorSmartSaver@pic16f877ccs.github.com",
-  "version": 1,
-  "version-name": "1.5.0"
+  "version": 2,
+  "version-name": "1.6.0"
 }
